@@ -1,66 +1,105 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { getCurrentProfile } from '../../Actions/estateActions';
-import Spinner from '../common/Spinner';
+import {Link} from 'react-router-dom';
+//import isEmpty from '../../validation/is-empty';
+
+import { GoogleMap, LoadScript, Polygon } from '@react-google-maps/api';
+import MapView from "../map/MapView";
 
 class Dashboard extends Component {
-    componentDidMount() {
-        this.props.getCurrentProfile();
+    constructor(){
+        super();
+        this.state = {
+            userName: '',
+            estate: '',
+            errors: {}
+        };
     }
 
     render() {
-        const { user } = this.props.auth;
-        const { profile, loading } = this.props.profile;
 
-        let dashboardContent;
-
-        if (profile === null || loading) {
-            dashboardContent = <Spinner />;
-        } else {
-            //Check if logged in user has profile data
-            if (Object.keys(profile).length > 0) {
-                dashboardContent = <h4>TODO: DISPLAY PROFILE</h4>;
-            } else {
-                // User is logged in but has no profile
-                dashboardContent = (
-                    <div>
-                        <p className="lead text-muted">Welcome {user.name}</p>
-                        {/*<p className="lead text-muted">Welcome User</p>*/}
-                        <p>You have not yet setup a profile, please add some info</p>
-                        <Link to="/create-profile" className="btn btn-lg btn-info">
-                            Create Profile
-                        </Link>
-                    </div>
-                );
-            }
-        }
-
-        return (
-            <div className="dashboard">
+        return (<div className="profile">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
-                            <h1 className="display-4">Dashboard</h1>
-                            {dashboardContent}
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="card card-body bg-info text-white mb-3">
+                                        <div className="row">
+                                            <div className="col-4 col-md-3 m-auto">
+                                                <img className="rounded-circle"
+                                                     src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                                                     alt=""/>
+                                            </div>
+                                        </div>
+                                        <div className="text-center">
+                                            <h1 className="display-4 text-center">John Doe</h1>
+                                            <p className="lead text-center">Developer at Microsoft</p>
+                                            <p>Seattle, WA</p>
+                                            <p>
+                                                <a className="text-white p-2" href="#">
+                                                    <i className="fas fa-globe fa-2x"></i>
+                                                </a>
+                                                <a className="text-white p-2" href="#">
+                                                    <i className="fab fa-twitter fa-2x"></i>
+                                                </a>
+                                                <a className="text-white p-2" href="#">
+                                                    <i className="fab fa-facebook fa-2x"></i>
+                                                </a>
+                                                <a className="text-white p-2" href="#">
+                                                    <i className="fab fa-linkedin fa-2x"></i>
+                                                </a>
+                                                <a className="text-white p-2" href="#">
+                                                    <i className="fab fa-instagram fa-2x"></i>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="card card-body bg-light mb-3">
+                                        <h3 className="text-center text-info">John's Bio</h3>
+                                        <div className="row">
+                                            <div className="card card-body md-light mb-3"><MapView/></div>
+                                            <div className="card card-body md-light mb-3"></div>
+                                            <div className="card card-body md-light mb-3">text</div>
+                                            <div className="card card-body md-light mb-3">text</div>
+                                        </div>
+                                        <hr/>
+                                        <h3 className="text-center text-info">Skill Set</h3>
+                                        <div className="row">
+                                            <div className="d-flex flex-wrap justify-content-center align-items-center">
+                                                <div className="p-3">
+                                                    <i className="fa fa-check"></i> HTML
+                                                </div>
+                                                <div className="p-3">
+                                                    <i className="fa fa-check"></i> CSS
+                                                </div>
+                                                <div className="p-3">
+                                                    <i className="fa fa-check"></i> JavaScript
+                                                </div>
+                                                <div className="p-3">
+                                                    <i className="fa fa-check"></i> Python
+                                                </div>
+                                                <div className="p-3">
+                                                    <i className="fa fa-check"></i> C#
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
             </div>
-        );
+
+    );
     }
 }
 
-Dashboard.propTypes = {
-    getCurrentProfile: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    profile: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-    profile: state.profile,
-    auth: state.auth
-});
-
-export default connect(mapStateToProps, { getCurrentProfile })(Dashboard);
+export default Dashboard;
